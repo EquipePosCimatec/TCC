@@ -29,8 +29,8 @@ def generate_text_with_context(context, prompt):
     full_prompt = f"{context}\n\n{prompt}"
     try:
         # Uso correto da API de chat completions
-        response = openai.ChatCompletion.create(
-            model="gpt-4-turbo-preview",  
+        response = client.chat.completions.create(
+            model="gpt-4",  
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": full_prompt}
