@@ -25,23 +25,21 @@ def retrieve_information(documents, query):
     # Implementação de uma busca simples nos documentos
     return "Informação relevante extraída dos documentos"
 
-def generate_text_with_context(context, prompts):
+def generate_text_with_context(context, prompt):
+    full_prompt = f"{context}\n\n{prompt}"
     try:
-        responses = []
-        for prompt in prompts:
-            full_prompt = f"{context}\n\n{prompt}"
-            response = client.chat.completions.create(
-                model="gpt-4-turbo-preview",  
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": full_prompt}
-                ]
-            )
-            responses.append(response.choices[0].message.content)
-        return responses
+        # Uso correto da API de chat completions
+        response = client.chat.completions.create(
+            model="gpt-4-turbo-preview",  
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": full_prompt}
+            ]
+        )
+        return response.choices[0].message.content
     except Exception as e:
         print(f"Erro ao gerar texto com o chat: {e}")
-        return str(e)
+        return e
 
 
 # Configuração da Interface Streamlit
@@ -61,20 +59,17 @@ user_query = st.text_input("Digite sua consulta")
 
 if st.button('Gerar Resposta'):
     if model_files and user_query:
-        # Processamento dos modelos de documentos
+        # Processamento dos modelos de documentos como perguntas
         model_content = [extract_text_from_docx(file) for file in model_files]
-        # Processamento dos documentos de conhecimento adicional
-        knowledge_content = [extract_text_from_docx(file) for file in knowledge_files] if knowledge_files else []
 
-        # Combinação de conteúdos dos modelos e conhecimento adicional
-        combined_content = "\n".join(model_content + knowledge_content)
+        # Processamento dos documentos de conhecimento adicional como contexto
+        knowledge_content = "\n".join([extract_text_from_docx(file) for file in knowledge_files] if knowledge_files else [])
 
-        # Recuperação de informações baseada em todos os documentos carregados
-        relevant_info = retrieve_information(combined_content, user_query)
-
-        # Geração de texto com o prompt enriquecido
-        answer = generate_text_with_context(relevant_info, user_query)
-        st.write("Resposta:", answer)
+        # Geração de texto para cada pergunta no modelo com contexto enriquecido
+        answers = generate_text_with_context(knowledge_content, model_content)
+        
+        for answer in answers:
+            st.write("Resposta:", answer)
     else:
         st.write("Por favor, carregue pelo menos um modelo de documento e digite uma consulta.")
 
