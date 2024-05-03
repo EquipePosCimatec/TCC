@@ -26,21 +26,21 @@ def retrieve_information(documents, query):
     return "Informação relevante extraída dos documentos"
 
 def generate_text_with_context(context, prompt):
-   
-    print("Contexto", {context})
-    print("prompt", {context})
     full_prompt = f"{context}\n\n{prompt}"
     try:
-        response = client.chat.completions.create(
+        # Uso correto da API de chat completions
+        response = openai.ChatCompletion.create(
             model="gpt-4-turbo-preview",  
-            prompt=full_prompt,
-            max_tokens=150,
-            temperature=0.7 
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": full_prompt}
+            ]
         )
-        return response['choices'][0]['text'].strip()
+        return response['choices'][0]['message']['content']
     except Exception as e:
-        print("Erro ao gerar texto: ", e)
-        return e
+        print(f"Erro ao gerar texto com o chat: {e}")
+        return "Houve um erro ao gerar a resposta."
+
 
 
 # Configuração da Interface Streamlit
