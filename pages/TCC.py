@@ -28,7 +28,7 @@ def retrieve_information(documents, query):
 def generate_text_with_context(context, prompt):
     full_prompt = f"{context}\n\n{prompt}"
     try:
-        response = client.Completion.create(
+        response = client.chat.Completion.create(
             model="gpt-4-turbo-preview",  
             prompt=full_prompt,
             max_tokens=150,
