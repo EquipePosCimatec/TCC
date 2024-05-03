@@ -27,12 +27,18 @@ def retrieve_information(documents, query):
 
 def generate_text_with_context(context, prompt):
     full_prompt = f"{context}\n\n{prompt}"
-    response = client.chat.completions.create(
-        model="gpt-4-turbo-preview",  # Substitua pelo modelo apropriado
-        prompt=full_prompt,
-        max_tokens=150
-    )
-    return response['choices'][0]['text'].strip()
+    try:
+        response = client.Completion.create(
+            model="gpt-4-turbo-preview",  
+            prompt=full_prompt,
+            max_tokens=150,
+            temperature=0.7  # Ajuste conforme necessário para criatividade
+        )
+        return response['choices'][0]['text'].strip()
+    except Exception as e:
+        print("Erro ao gerar texto: ", e)
+        return "Erro ao gerar texto."
+
 
 # Configuração da Interface Streamlit
 st.title('Sistema de Automatização do Artefatos de contratação com RAG')
