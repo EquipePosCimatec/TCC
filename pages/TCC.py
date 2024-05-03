@@ -19,7 +19,7 @@ def extract_text_from_docx(uploaded_file):
         return '\n'.join(full_text)
     except Exception as e:
         print(f"Erro ao processar o arquivo: {e}")
-        return ""
+        return e
 
 def retrieve_information(documents, query):
     # Implementação de uma busca simples nos documentos
