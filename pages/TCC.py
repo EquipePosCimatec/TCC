@@ -36,7 +36,7 @@ def generate_text_with_context(context, prompt):
                 {"role": "user", "content": full_prompt}
             ]
         )
-        return response['choices'][0]['message']['content']
+        return response.choices[0].message.content
     except Exception as e:
         print(f"Erro ao gerar texto com o chat: {e}")
         return e
