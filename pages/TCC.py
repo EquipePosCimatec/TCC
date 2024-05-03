@@ -63,7 +63,7 @@ user_query = st.text_input("Digite sua consulta")
 
 if st.button('Gerar Resposta'):
     if model_files and user_query:
-         errors = []
+        errors = []
         # Processamento dos modelos de documentos
         model_content = [extract_text_from_docx(file) for file in model_files]
         if any(error):
