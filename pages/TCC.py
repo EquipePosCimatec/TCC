@@ -18,6 +18,7 @@ def extract_text_from_docx(uploaded_file):
         doc = Document(BytesIO(uploaded_file.getvalue()))
         full_text = []
         for para in doc.paragraphs:
+            print(para.text)
             full_text.append(para.text)
         return '\n'.join(full_text)
     except Exception as e:
