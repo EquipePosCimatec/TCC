@@ -9,17 +9,17 @@ client = OpenAI(api_key=chave)
 # Configuração da chave API da OpenAI
 #openai.api_key = st.secrets["KEY"]
 
-def extract_text_from_docx(file):
+def extract_text_from_docx(uploaded_file):
     try:
-        doc = Document(file)
+        # Use BytesIO para abrir o arquivo como um documento do Word
+        doc = Document(BytesIO(uploaded_file.getvalue()))
         full_text = []
         for para in doc.paragraphs:
             full_text.append(para.text)
         return '\n'.join(full_text)
     except Exception as e:
-        print(f"Erro ao processar o arquivo: {file.name}. Erro: {str(e)}")
+        print(f"Erro ao processar o arquivo: {e}")
         return ""
-
 
 def retrieve_information(documents, query):
     # Implementação de uma busca simples nos documentos
@@ -30,7 +30,7 @@ def generate_text_with_context(context, prompt):
     try:
         # Uso correto da API de chat completions
         response = client.chat.completions.create(
-            model="gpt-4",  
+            model="gpt-4-turbo-preview",  
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": full_prompt}
