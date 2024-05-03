@@ -2,3 +2,4 @@ streamlit
 pyngrok
 python-docx
 openai
+logging
