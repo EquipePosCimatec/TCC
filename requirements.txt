@@ -1,7 +1,7 @@
 streamlit
 pyngrok
 python-docx
-openai
+OpenAI
 logging
 BytesIO
 Document
