@@ -61,19 +61,27 @@ knowledge_files = st.file_uploader("Escolha documentos de conhecimento (arquivos
 st.header("Digite seu prompt")
 user_query = st.text_input("Digite sua consulta")
 
+import streamlit as st
+
 if st.button('Gerar Resposta'):
     if model_files and user_query:
         errors = []
-        
+        model_content = []
+        knowledge_content = []
+
         # Processamento dos modelos de documentos
-        model_content, error = zip(*[extract_text_from_docx(file) for file in model_files])
-        if any(error):
-            errors.extend(error)
+        for file in model_files:
+            text, error = extract_text_from_docx(file)
+            model_content.append(text)  # sempre adicione o texto, mesmo que seja vazio
+            if error:  # apenas adicione erros se eles existirem
+                errors.append(error)
 
         # Processamento dos documentos de conhecimento adicional
-        knowledge_content, error = zip(*[extract_text_from_docx(file) for file in knowledge_files]) if knowledge_files else ([], [])
-        if any(error):
-            errors.extend(error)
+        for file in knowledge_files:
+            text, error = extract_text_from_docx(file)
+            knowledge_content.append(text)  # sempre adicione o texto, mesmo que seja vazio
+            if error:  # apenas adicione erros se eles existirem
+                errors.append(error)
 
         # Combinação de conteúdos dos modelos e conhecimento adicional
         combined_content = "\n".join(model_content + knowledge_content)
@@ -84,10 +92,8 @@ if st.button('Gerar Resposta'):
             errors.append(error)
 
         if errors:
-            st.error("Erros encontrados:\n" + "\n".join(filter(None, errors)))
+            st.error("Erros encontrados:\n" + "\n".join(errors))
         else:
             st.write("Resposta:", answer)
     else:
         st.error("Por favor, carregue pelo menos um modelo de documento e digite uma consulta.")
-
-
