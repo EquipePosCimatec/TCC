@@ -1,4 +1,5 @@
 import streamlit as st
+import logging
 from docx import Document
 from openai import OpenAI
 from io import BytesIO
