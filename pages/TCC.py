@@ -32,7 +32,7 @@ def generate_text_with_context(context, prompt):
         response = client.chat.completions.create(
             model="gpt-4-turbo-preview",  
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "Você será um especialista em criar artefatos de licitação Documento de Formalização da Demanda (DFD),Estudo Técnico Preliminar (ETP) e Termo de Referência (TR) "},
                 {"role": "user", "content": full_prompt}
             ]
         )
