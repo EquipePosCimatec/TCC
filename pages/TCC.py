@@ -26,6 +26,9 @@ def retrieve_information(documents, query):
     return "Informação relevante extraída dos documentos"
 
 def generate_text_with_context(context, prompt):
+   
+    print("Contexto", {context})
+    print("prompt", {context})
     full_prompt = f"{context}\n\n{prompt}"
     try:
         response = client.chat.Completion.create(
