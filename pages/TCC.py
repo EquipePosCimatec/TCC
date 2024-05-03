@@ -31,7 +31,7 @@ def generate_text_with_context(context, prompt):
     print("prompt", {context})
     full_prompt = f"{context}\n\n{prompt}"
     try:
-        response = client.chat.Completion.create(
+        response = client.chat.completions.create(
             model="gpt-4-turbo-preview",  
             prompt=full_prompt,
             max_tokens=150,
