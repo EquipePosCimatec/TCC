@@ -35,7 +35,7 @@ def generate_text_with_context(context, prompt):
     return response['choices'][0]['text'].strip()
 
 # Configuração da Interface Streamlit
-st.title('Sistema de Enriquecimento de Prompts com RAG')
+st.title('Sistema de Automatização do Artefatos de contratação com RAG')
 
 # Carregamento de Modelos de Documentos
 st.header("Carregue seus modelos de documentos")
