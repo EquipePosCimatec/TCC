@@ -59,17 +59,21 @@ user_query = st.text_input("Digite sua consulta")
 
 if st.button('Gerar Resposta'):
     if model_files and user_query:
-        # Processamento dos modelos de documentos como perguntas
+        # Processamento dos modelos de documentos
         model_content = [extract_text_from_docx(file) for file in model_files]
+        # Processamento dos documentos de conhecimento adicional
+        knowledge_content = [extract_text_from_docx(file) for file in knowledge_files] if knowledge_files else []
 
-        # Processamento dos documentos de conhecimento adicional como contexto
-        knowledge_content = "\n".join([extract_text_from_docx(file) for file in knowledge_files] if knowledge_files else [])
+        # Combinação de conteúdos dos modelos e conhecimento adicional
+        combined_content = "\n".join(model_content + knowledge_content)
 
-        # Geração de texto para cada pergunta no modelo com contexto enriquecido
-        answers = generate_text_with_context(knowledge_content, model_content)
-        
-        for answer in answers:
-            st.write("Resposta:", answer)
+        # Recuperação de informações baseada em todos os documentos carregados
+        relevant_info = retrieve_information(combined_content, user_query)
+
+        # Geração de texto com o prompt enriquecido
+        answer = generate_text_with_context(relevant_info, user_query)
+        st.write("Resposta:", answer)
     else:
         st.write("Por favor, carregue pelo menos um modelo de documento e digite uma consulta.")
+
 
