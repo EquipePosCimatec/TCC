@@ -1,6 +1,7 @@
 import streamlit as st
 from docx import Document
 from openai import OpenAI
+rom io import BytesIO
 
 # 2. Configuração da API do OpenAI
 chave = st.secrets["KEY"]
