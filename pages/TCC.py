@@ -39,7 +39,7 @@ def generate_text_with_context(context, prompt):
         return response['choices'][0]['message']['content']
     except Exception as e:
         print(f"Erro ao gerar texto com o chat: {e}")
-        return "Houve um erro ao gerar a resposta."
+        return e
 
 
 
