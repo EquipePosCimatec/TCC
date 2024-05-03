@@ -35,7 +35,7 @@ def generate_text_with_context(context, prompt):
             model="gpt-4-turbo-preview",  
             prompt=full_prompt,
             max_tokens=150,
-            temperature=0.7  # Ajuste conforme necessário para criatividade
+            temperature=0.7 
         )
         return response['choices'][0]['text'].strip()
     except Exception as e:
