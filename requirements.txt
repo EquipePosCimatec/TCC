@@ -3,3 +3,5 @@ pyngrok
 python-docx
 openai
 logging
+BytesIO
+Document
