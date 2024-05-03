@@ -9,6 +9,10 @@ client = OpenAI(api_key=chave)
 # Configuração da chave API da OpenAI
 #openai.api_key = st.secrets["KEY"]
 
+def safe_join_content(content_list):
+    """ Garante que todos os elementos da lista são strings e concatena com segurança. """
+    return "\n".join(str(item) for item in content_list if item)
+
 def extract_text_from_docx(uploaded_file):
     try:
         # Use BytesIO para abrir o arquivo como um documento do Word
@@ -59,21 +63,23 @@ user_query = st.text_input("Digite sua consulta")
 
 if st.button('Gerar Resposta'):
     if model_files and user_query:
-        # Processamento dos modelos de documentos
+        # Processamento dos modelos de documentos como perguntas
         model_content = [extract_text_from_docx(file) for file in model_files]
-        # Processamento dos documentos de conhecimento adicional
+        # Verifica se há elementos e os converte em strings
+        model_content = [str(text) for text in model_content if text]
+
+        # Processamento dos documentos de conhecimento adicional como contexto
         knowledge_content = [extract_text_from_docx(file) for file in knowledge_files] if knowledge_files else []
+        # Verifica se há elementos e os converte em strings
+        knowledge_content = [str(text) for text in knowledge_content if text]
 
-        # Combinação de conteúdos dos modelos e conhecimento adicional
-        combined_content = "\n".join(model_content + knowledge_content)
+        # Combinação segura dos conteúdos dos modelos e conhecimento adicional
+        combined_content = safe_join_content(model_content + knowledge_content)
 
-        # Recuperação de informações baseada em todos os documentos carregados
-        relevant_info = retrieve_information(combined_content, user_query)
-
-        # Geração de texto com o prompt enriquecido
-        answer = generate_text_with_context(relevant_info, user_query)
-        st.write("Resposta:", answer)
+        # Geração de texto para cada pergunta no modelo com contexto enriquecido
+        answers = generate_text_with_context(combined_content, model_content)
+        
+        for answer in answers:
+            st.write("Resposta:", answer)
     else:
         st.write("Por favor, carregue pelo menos um modelo de documento e digite uma consulta.")
-
-
