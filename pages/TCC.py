@@ -37,7 +37,7 @@ def generate_text_with_context(context, prompt):
         return response['choices'][0]['text'].strip()
     except Exception as e:
         print("Erro ao gerar texto: ", e)
-        return print("Erro ao gerar texto: ", e)
+        return e
 
 
 # Configuração da Interface Streamlit
